@@ -1,23 +1,60 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice , createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 
-const initialState = [
-  {
-    itemCode: "",
-    itemName: "",
-    qty: 0,
-    rate: 0,
-  },
-];
+
+export const fetchItems = createAsyncThunk (
+  "items/fetchItems",
+  async()=>{
+    try{
+      const response = await axios.get("http://5.189.180.8:8010/item");
+      console.log('this is response from items',response)
+      return response.data;
+    }catch(err){
+      throw Error('Failed to fetch items from data base')
+    }
+  }
+)
+
+
+
+const initialState = {
+  items: [],
+  detailData: [],
+  loading : false,
+  error : null,
+};
 
 const detailSlice = createSlice({
   name: "detail",
   initialState,
   reducers: {
     addRow: (state) => {
-      state.push({ itemCode: "", itemName: "", qty: 0, rate: 0 });
+      state.detailData.push({ itemCode: "", itemName: "", qty: 0, rate: 0 });
     },
+    updateDetail: (state,action) => {
+      const { index , filed , value } = action.payload;
+      state.detailData[index][filed] = value;
+    },
+    clearData : (state)=>{
+      state.detailData = [];
+    }
   },
+  extraReducers :(bulider) => {
+    bulider
+    .addCase(fetchItems.pending , (state)=>{
+      state.loading = 'pending';
+      state.error = null;
+    })
+    .addCase(fetchItems.fulfilled , (state,action)=>{
+      state.loading = false;
+      state.items = action.payload;
+    })
+    .addCase(fetchItems.rejected, (state,action)=>{
+      state.loading = false;
+      state.error = action.error.message
+    })
+  }
 });
 
-export const { addRow } = detailSlice.actions;
+export const { addRow , updateDetail, clearData } = detailSlice.actions;
 export default detailSlice.reducer;

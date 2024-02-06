@@ -1,4 +1,15 @@
+import { useEffect, useState } from "react";
+import { format } from "date-fns";
+
 const Header = () => {
+  const [currentDate, setCurrentDate] = useState("");
+
+  useEffect(() => {
+    const today = new Date();
+    const formatted = format(today, "dd-MM-yyyy");
+    setCurrentDate(formatted);
+  }, []);
+
   return (
     <div className="mt-4">
       <h1 className="bg-yellow-300 text-center font-semibold">Header</h1>
@@ -19,7 +30,9 @@ const Header = () => {
               type="text"
               name="vr_date"
               id="vr_date"
+              value={currentDate}
               className="rounded-sm border ml-1"
+              readOnly
             />
           </div>
           <div className="flex">
@@ -36,16 +49,16 @@ const Header = () => {
         <div className="flex mt-10 justify-between">
           <div className="flex">
             <p>Ac Name :-</p>
-            <input 
+            <input
               type="text"
               id="ac_name"
               name="ac_name"
-              className="rounded-sm border ml-1"
+              className="rounded-sm border ml-1 w-96"
             />
           </div>
           <div className="flex">
             <p>Ac Amt</p>
-            <input 
+            <input
               type="text"
               id="ac_amt"
               name="ac_amt"
