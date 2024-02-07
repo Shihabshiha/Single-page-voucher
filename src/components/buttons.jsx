@@ -1,14 +1,16 @@
 import { useDispatch, useSelector } from "react-redux";
 import { addRow, clearData } from "../redux/detailTableSlice";
 import { clearHeader, saveDataToDatabase } from "../redux/headerTableSlice";
+import PrintableComponent from "./printComponent";
 
 
 
 const Buttons = () => {
+ 
   const dispatch = useDispatch();
   const headerData = useSelector((state) => state.header.headerData);
   const detailData = useSelector((state) => state.detailTable.detailData);
-  
+
   const handleAddRow = () => {
     dispatch(addRow());
   };
@@ -26,7 +28,7 @@ const Buttons = () => {
       !headerData.acAmt ||
       !headerData.status
     ) {
-      alert("Please fill in all fields in the header section.")
+      alert("Please fill in all fields in the header section.");
       return;
     }
 
@@ -38,7 +40,7 @@ const Buttons = () => {
         !item.qty ||
         !item.rate
       ) {
-        alert("Please fill in all fields in the detail section")
+        alert("Please fill in all fields in the detail section");
         return;
       }
     }
@@ -63,12 +65,13 @@ const Buttons = () => {
     };
     try {
       dispatch(saveDataToDatabase(dataToSend));
-      alert('Data saved successfully')
+      alert("Data saved successfully");
     } catch (error) {
-      alert('Error adding the data to data base')
+      alert("Error adding the data to data base");
     }
   };
 
+  
 
   return (
     <div className="flex h-screen justify-center items-center flex-col ml-3">
@@ -90,9 +93,7 @@ const Buttons = () => {
       >
         Save
       </button>
-      <button className="px-4 py-2 rounded bg-amber-300 hover:bg-amber-400 ">
-        Print
-      </button>
+      <PrintableComponent />
     </div>
   );
 };

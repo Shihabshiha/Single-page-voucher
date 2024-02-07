@@ -1,12 +1,15 @@
 import { useDispatch, useSelector } from "react-redux";
 import { fetchItems, updateDetail } from "../redux/detailTableSlice";
 import { useEffect, useState } from "react";
-import { descriptionValidation, qtyValidation, rateValidation } from "../validation/detailValidation";
-
+import {
+  descriptionValidation,
+  qtyValidation,
+  rateValidation,
+} from "../validation/detailValidation";
 
 const DetailTable = () => {
   const dispatch = useDispatch();
-  const [errors, setErrors] = useState({})
+  const [errors, setErrors] = useState({});
   const detailData = useSelector((state) => state.detailTable.detailData);
   const items = useSelector((state) => state.detailTable.items);
 
@@ -14,38 +17,41 @@ const DetailTable = () => {
     // dispatch(updateDetail({ index, field, value }));
     let validationSchema, fieldName;
 
-    if (field === 'qty') {
+    if (field === "qty") {
       validationSchema = qtyValidation;
-      fieldName = 'qty';
-      value = parseInt(value)
-    } else if (field === 'rate') {
+      fieldName = "qty";
+      value = parseInt(value);
+    } else if (field === "rate") {
       validationSchema = rateValidation;
-      fieldName = 'rate';
-      value = parseInt(value)
-    } else if(field === 'description'){
+      fieldName = "rate";
+      value = parseInt(value);
+    } else if (field === "description") {
       validationSchema = descriptionValidation;
-      fieldName = 'description'
+      fieldName = "description";
     }
     try {
-      if(!value){
-        dispatch(updateDetail({ index, field, value:null }))
-        return
+      if (!value) {
+        dispatch(updateDetail({ index, field, value: null }));
+        return;
       }
       await validationSchema.validate(value);
-      setErrors((prevErrors) => ({ ...prevErrors, [fieldName]: '' }));
+      setErrors((prevErrors) => ({ ...prevErrors, [fieldName]: "" }));
       dispatch(updateDetail({ index, field, value }));
     } catch (error) {
-      setErrors((prevErrors) => ({ ...prevErrors, [fieldName]: error.message }));
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [fieldName]: error.message,
+      }));
     }
   };
 
   const calculateTotalAmt = () => {
     let totalAmt = 0;
-    detailData.forEach((item)=>{
-      totalAmt += item.qty * item.rate
-    })
-    return totalAmt
-  }
+    detailData.forEach((item) => {
+      totalAmt += item.qty * item.rate;
+    });
+    return totalAmt;
+  };
 
   const handleItemCodeChange = (index, field, value) => {
     dispatch(updateDetail({ index, field, value }));
@@ -63,8 +69,6 @@ const DetailTable = () => {
   useEffect(() => {
     dispatch(fetchItems());
   }, []);
-
- 
 
   return (
     <div className="mt-10">
@@ -85,8 +89,7 @@ const DetailTable = () => {
           {detailData.length > 0 &&
             detailData.map((row, index) => (
               <tr key={index}>
-                
-                <td className="border px-2 py-2 text-center">{index+1}</td>
+                <td className="border px-2 py-2 text-center">{index + 1}</td>
                 <td className="border px-2 py-2 text-start">
                   <select
                     value={row.itemCode}
@@ -113,7 +116,11 @@ const DetailTable = () => {
                       handleChange(index, "description", e.target.value)
                     }
                   />
-                  {errors.description && <div className="text-red-500 ml-1 mt-1">{errors.description}</div> }
+                  {errors.description && (
+                    <div className="text-red-500 ml-1 mt-1">
+                      {errors.description}
+                    </div>
+                  )}
                 </td>
                 <td className="border px-2 py-2 text-end">
                   <input
@@ -121,7 +128,9 @@ const DetailTable = () => {
                     value={row.qty}
                     onChange={(e) => handleChange(index, "qty", e.target.value)}
                   />
-                  {errors.qty && <div className="text-red-500 ml-1 mt-1">{errors.qty}</div> }
+                  {errors.qty && (
+                    <div className="text-red-500 ml-1 mt-1">{errors.qty}</div>
+                  )}
                 </td>
                 <td className="border px-2 py-2 text-end">
                   <input
@@ -131,7 +140,9 @@ const DetailTable = () => {
                       handleChange(index, "rate", e.target.value)
                     }
                   />
-                  {errors.rate && <div className="text-red-500 ml-1 mt-1">{errors.rate}</div> }
+                  {errors.rate && (
+                    <div className="text-red-500 ml-1 mt-1">{errors.rate}</div>
+                  )}
                 </td>
                 <td className="border px-2 py-2 text-end">
                   {row.qty * row.rate}

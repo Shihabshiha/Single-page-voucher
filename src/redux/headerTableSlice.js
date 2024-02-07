@@ -1,20 +1,20 @@
-import { createSlice , createAsyncThunk } from "@reduxjs/toolkit";
-import axios from 'axios'
-
-
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 
 export const saveDataToDatabase = createAsyncThunk(
-  'data/saveDataToDatabase',
-  async ( dataToSend , {rejectWithValue})=>{
-    try{
-      const response = axios.post('http://5.189.180.8:8010/header/multiple', dataToSend)
+  "data/saveDataToDatabase",
+  async (dataToSend, { rejectWithValue }) => {
+    try {
+      const response = axios.post(
+        "http://5.189.180.8:8010/header/multiple",
+        dataToSend
+      );
       return response.data;
-    }catch(error){
-      return rejectWithValue('Failed to save data to database')
+    } catch (error) {
+      return rejectWithValue("Failed to save data to database");
     }
   }
-)
-
+);
 
 const initialState = {
   headerData: {
@@ -24,9 +24,9 @@ const initialState = {
     acName: "",
     acAmt: 0,
   },
-  loading : false,
-  error : null,
-  savedData : []
+  loading: false,
+  error: null,
+  savedData: [],
 };
 
 const headerSlice = createSlice({
@@ -48,25 +48,31 @@ const headerSlice = createSlice({
     setTotalAmt: (state, action) => {
       state.headerData.acAmt = action.payload;
     },
-    clearHeader:(state)=>{
-      state.headerData = {...initialState.headerData}
-    }
+    clearHeader: (state) => {
+      state.headerData = { ...initialState.headerData };
+    },
   },
-  extraReducers:(builder)=>{
+  extraReducers: (builder) => {
     builder
-      .addCase(saveDataToDatabase.pending , (state)=>{
-        state.loading = 'pending';
+      .addCase(saveDataToDatabase.pending, (state) => {
+        state.loading = "pending";
       })
-      .addCase(saveDataToDatabase.fulfilled ,(state,action)=>{
-        state.loading = false
-        state.savedData = action.payload
+      .addCase(saveDataToDatabase.fulfilled, (state, action) => {
+        state.loading = false;
+        state.savedData = action.payload;
       })
-      .addCase(saveDataToDatabase.rejected,(state,action)=>{
-        state.error = action.error.message
-      })
-  }
+      .addCase(saveDataToDatabase.rejected, (state, action) => {
+        state.error = action.error.message;
+      });
+  },
 });
 
-export const { setVrNo, setVrDate, setAcName, setStatus, setTotalAmt , clearHeader } =
-  headerSlice.actions;
+export const {
+  setVrNo,
+  setVrDate,
+  setAcName,
+  setStatus,
+  setTotalAmt,
+  clearHeader,
+} = headerSlice.actions;
 export default headerSlice.reducer;
