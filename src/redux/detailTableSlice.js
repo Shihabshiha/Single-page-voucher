@@ -29,11 +29,11 @@ const detailSlice = createSlice({
   initialState,
   reducers: {
     addRow: (state) => {
-      state.detailData.push({ itemCode: "", itemName: "", qty: 0, rate: 0 });
+      state.detailData.push({ itemCode: "", itemName: "", qty:null, rate:null });
     },
     updateDetail: (state,action) => {
-      const { index , filed , value } = action.payload;
-      state.detailData[index][filed] = value;
+      const { index , field , value } = action.payload;
+      state.detailData[index][field] = value;
     },
     clearData : (state)=>{
       state.detailData = [];
