@@ -14,6 +14,14 @@ const DetailTable = () => {
     dispatch(updateDetail({ index, filed, value }));
   };
 
+  const calculateTotalAmt = () => {
+    let totalAmt = 0;
+    detailData.forEach((item)=>{
+      totalAmt += item.qty * item.rate
+    })
+    return totalAmt
+  }
+
   const handleItemCodeChange = (index, filed, value) => {
     dispatch(updateDetail({ index, filed, value }));
     const selectedItem = items.find((item) => item.item_code === value);
@@ -49,10 +57,11 @@ const DetailTable = () => {
           </tr>
         </thead>
         <tbody>
-          {detailData.length &&
+          {detailData.length > 0 &&
             detailData.map((row, index) => (
               <tr key={index}>
-                <td className="border px-2 py-2 text-center">{index + 1}</td>
+                
+                <td className="border px-2 py-2 text-center">{index+1}</td>
                 <td className="border px-2 py-2 text-start">
                   <select
                     value={row.itemCode}
@@ -74,6 +83,7 @@ const DetailTable = () => {
                   <input
                     type="text"
                     value={row.description}
+                    className="border"
                     onChange={(e) =>
                       handleChange(index, "description", e.target.value)
                     }
@@ -102,6 +112,10 @@ const DetailTable = () => {
             ))}
         </tbody>
       </table>
+      <div className="flex justify-end mr-2">
+        <p className="mr-24">Total:-</p>
+        <p>{calculateTotalAmt()}</p>
+      </div>
     </div>
   );
 };
