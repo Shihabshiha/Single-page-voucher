@@ -8,16 +8,13 @@ const DetailTable = () => {
   const dispatch = useDispatch();
   const [errors, setErrors] = useState({})
   const detailData = useSelector((state) => state.detailTable.detailData);
-  console.log("this is detail table", detailData);
   const items = useSelector((state) => state.detailTable.items);
-  console.log("items", items);
 
   const handleChange = async (index, field, value) => {
     // dispatch(updateDetail({ index, field, value }));
     let validationSchema, fieldName;
 
     if (field === 'qty') {
-      console.log('qty value',value)
       validationSchema = qtyValidation;
       fieldName = 'qty';
       value = parseInt(value)
@@ -41,11 +38,6 @@ const DetailTable = () => {
       setErrors((prevErrors) => ({ ...prevErrors, [fieldName]: error.message }));
     }
   };
-
-  // const handleChange = (index, filed, value) => {
-  //   dispatch(updateDetail({ index, filed, value }));
-  // };
-  
 
   const calculateTotalAmt = () => {
     let totalAmt = 0;
@@ -142,7 +134,6 @@ const DetailTable = () => {
                   {errors.rate && <div className="text-red-500 ml-1 mt-1">{errors.rate}</div> }
                 </td>
                 <td className="border px-2 py-2 text-end">
-                  {console.log(row.qty)}
                   {row.qty * row.rate}
                 </td>
               </tr>

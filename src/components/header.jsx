@@ -13,7 +13,6 @@ const Header = () => {
   const detailData = useSelector((state) => state.detailTable.detailData);
   const accountName = useSelector((state)=> state.header.headerData.acName);
   const status = useSelector((state)=>state.header.headerData.status);
-  const totalAmot = useSelector((state)=>state.header.headerData.acAmt)
 
   const calculateTotalAmt = (detailData) => {
     let totalAmt = 0;

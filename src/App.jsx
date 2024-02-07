@@ -2,6 +2,7 @@ import Header from "./components/header";
 import DetailTable from "./components/detail-table";
 import Buttons from "./components/buttons";
 
+
 function App() {
   return (
     <>

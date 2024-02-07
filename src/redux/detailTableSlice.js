@@ -7,7 +7,6 @@ export const fetchItems = createAsyncThunk (
   async()=>{
     try{
       const response = await axios.get("http://5.189.180.8:8010/item");
-      console.log('this is response from items',response)
       return response.data;
     }catch(err){
       throw Error('Failed to fetch items from data base')
